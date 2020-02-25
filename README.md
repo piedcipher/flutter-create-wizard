@@ -2,6 +2,8 @@
 
 <p align="center"><img src='https://raw.githubusercontent.com/piedcipher/flutter-create-wizard/master/readme-media/logo.png'></p>
 
+<p align="center"><img src='https://raw.githubusercontent.com/piedcipher/flutter-create-wizard/master/readme-media/demo.gif'></p>
+
 ## Features
 
 - Easy to use.
