@@ -7,7 +7,16 @@
 ## Features
 
 - Easy to use.
-- Customize Android/iOS language, Package Name and much more..
+- Customization
+    - [ ] Auto Pub Run after creation
+    - [ ] Template (app, package, package, plugin)
+    - [ ] Description
+    - [x] Organization Name
+    - [x] Project Name
+    - [x] Android Language
+    - [x] iOS Language
+    - [ ] AndroidX Support
+    - [x] Project Directory
 - GUI version of `flutter create` command.
 
 ## Release Notes
