@@ -3,6 +3,33 @@
 	"displayName": "Flutter Create Wizard",
 	"description": "Wizard for Creating Flutter Project",
 	"version": "0.0.1",
+	"publisher": "piedcipher",
+	"author": {
+		"name": "Tirth Patel",
+		"url": "https://github.com/piedcipher"
+	},
+	"contributors": [
+		{
+			"name": "Sunny Prasad",
+			"url": "https://github.com/prasadsunny1"
+		}
+	],
+	"homepage": "https://github.com/piedcipher/flutter-create-wizard",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/piedcipher/flutter-create-wizard"
+	},
+	"icon": "readme-media/logo.png",
+	"bugs": {
+		"url": "https://github.com/piedcipher/flutter-create-wizard/issues"
+	},
+	"license": "MIT",
+	"prettier": {
+		"useTabs": true,
+		"tabWidth": 4,
+		"singleQuote": true
+	},
+	"markdown": "github",
 	"engines": {
 		"vscode": "^1.42.0"
 	},
