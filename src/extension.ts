@@ -24,24 +24,6 @@ export function activate(context: vscode.ExtensionContext) {
 					return _projectName;
 				});
 
-			// projectName = projectName?.trim().toLowerCase().replace(' ', "_");
-
-			let folderName = await vscode.window
-				.showInputBox({
-					placeHolder: 'Folder Name (Default: Same as Project Name)',
-					prompt: 'Folder Name (Default: Same as Project Name)'
-				})
-				.then(_folderName => {
-					if (typeof _folderName === 'undefined') {
-						console.log(typeof _folderName);
-						return Promise.reject('Canceled Flutter Create Wizard');
-					}
-					if (_folderName === '') {
-						_folderName = projectName;
-					}
-					return _folderName;
-				});
-
 			let androidLanguage = await vscode.window
 				.showInputBox({
 					placeHolder: 'Default: java',
@@ -136,15 +118,11 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			projectDirectory = path.join(projectDirectory, folderName);
+			projectDirectory = path.join(projectDirectory, projectName);
 
 			if (existsSync(projectDirectory)) {
 				vscode.window.showInformationMessage('Same project exists');
 				return;
-			}
-
-			if (projectDirectory.startsWith('/')) {
-				projectDirectory = projectDirectory.substring(1);
 			}
 
 			// flutter create
@@ -165,7 +143,7 @@ export function activate(context: vscode.ExtensionContext) {
 				console.log(error);
 				var newpath = path.join(
 					(<vscode.Uri>directoyUri).fsPath,
-					folderName
+					projectName
 				);
 				const hasFoldersOpen = !!(
 					vscode.workspace.workspaceFolders &&
