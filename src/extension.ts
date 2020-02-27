@@ -24,61 +24,14 @@ export function activate(context: vscode.ExtensionContext) {
 					return _projectName;
 				});
 
-			let androidLanguage = await vscode.window
-				.showInputBox({
-					placeHolder: 'Default: java',
-					prompt: 'Android language: java or kotlin ?',
-					validateInput: value => {
-						if (
-							value === 'java' ||
-							value === 'kotlin' ||
-							value === ''
-						) {
-							return null;
-						} else {
-							return 'Please enter a correct language for android (java or kotlin)';
-						}
-					}
-				})
-				.then(_androidLanguage => {
-					if (typeof _androidLanguage === 'undefined') {
-						console.log(typeof _androidLanguage);
-						return Promise.reject('Canceled Flutter Create Wizard');
-					}
-					if (_androidLanguage === '') {
-						return 'java';
-					} else {
-						return _androidLanguage;
-					}
-				});
-
-			let iosLanguage = await vscode.window
-				.showInputBox({
-					placeHolder: 'iOS Language (Default: objc)',
-					prompt: 'iOS language: objc or swift ?',
-					validateInput: value => {
-						if (
-							value === 'objc' ||
-							value === 'swift' ||
-							value === ''
-						) {
-							return null;
-						} else {
-							return 'Please enter a correct language for iOS (objc or kotlin)';
-						}
-					}
-				})
-				.then(_iosLanguage => {
-					if (typeof _iosLanguage === 'undefined') {
-						console.log(typeof _iosLanguage);
-						return Promise.reject('Canceled Flutter Create Wizard');
-					}
-					if (_iosLanguage === '') {
-						return 'objc';
-					} else {
-						return _iosLanguage;
-					}
-				});
+			let androidLanguage = await vscode.window.showQuickPick([
+				'kotlin',
+				'java'
+			]);
+			let iosLanguage = await vscode.window.showQuickPick([
+				'swift',
+				'objc'
+			]);
 
 			let orgName = await vscode.window
 				.showInputBox({
@@ -139,23 +92,41 @@ export function activate(context: vscode.ExtensionContext) {
 				' ' +
 				projectDirectory;
 
-			exec(createCommand, (error, stdout, stderr) => {
-				console.log(error);
-				var newpath = path.join(
-					(<vscode.Uri>directoyUri).fsPath,
-					projectName
-				);
-				const hasFoldersOpen = !!(
-					vscode.workspace.workspaceFolders &&
-					vscode.workspace.workspaceFolders.length
-				);
-				const openInNewWindow = hasFoldersOpen;
-				vscode.commands.executeCommand(
-					'vscode.openFolder',
-					vscode.Uri.file(newpath),
-					openInNewWindow
-				);
-			});
+			vscode.window.withProgress(
+				{
+					location: vscode.ProgressLocation.Notification,
+					title: 'Creating ' + projectName,
+					cancellable: true
+				},
+				(_, token) => {
+					var newpath = path.join(
+						(<vscode.Uri>directoyUri).fsPath,
+						projectName
+					);
+					token.onCancellationRequested(() => {
+						console.log('Project creation canceled');
+					});
+
+					var p = new Promise(async _ => {
+						exec(createCommand, error => {
+							console.log(error);
+
+							const hasFoldersOpen = !!(
+								vscode.workspace.workspaceFolders &&
+								vscode.workspace.workspaceFolders.length
+							);
+							const openInNewWindow = hasFoldersOpen;
+							vscode.commands.executeCommand(
+								'vscode.openFolder',
+								vscode.Uri.file(newpath),
+								openInNewWindow
+							);
+						});
+					});
+
+					return p;
+				}
+			);
 		}
 	);
 	context.subscriptions.push(disposable);
