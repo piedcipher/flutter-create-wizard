@@ -24,19 +24,19 @@ export function activate(context: vscode.ExtensionContext) {
 					return _projectName;
 				});
 
-			let androidLanguage = await vscode.window.showQuickPick([
-				'kotlin',
-				'java'
-			]);
-			let iosLanguage = await vscode.window.showQuickPick([
-				'swift',
-				'objc'
-			]);
+			let androidLanguage = await vscode.window.showQuickPick(
+				['kotlin', 'java'],
+				{ placeHolder: 'Android Language' }
+			);
+			let iosLanguage = await vscode.window.showQuickPick(
+				['swift', 'objc'],
+				{ placeHolder: 'iOS Language' }
+			);
 
 			let orgName = await vscode.window
 				.showInputBox({
-					placeHolder: 'Org Name (Default: com.example)',
-					prompt: 'Org Name (Default: com.example)'
+					placeHolder: 'Org Name (Default: com.example.project_name)',
+					prompt: 'Org Name (Default: com.example.project_name)'
 				})
 				.then(_orgName => {
 					if (typeof _orgName === 'undefined') {
