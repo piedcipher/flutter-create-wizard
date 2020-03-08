@@ -3,14 +3,14 @@
 	"displayName": "Flutter Create Wizard",
 	"description": "Wizard for Creating Flutter Project",
 	"version": "0.0.1",
-	"publisher": "piedcipher",
+	"publisher": "prasadsunny1",
 	"author": {
 		"name": "Tirth Patel",
 		"url": "https://github.com/piedcipher"
 	},
 	"contributors": [
 		{
-			"name": "Sunny Prasad",
+			"name": "Sanni Prasad",
 			"url": "https://github.com/prasadsunny1"
 		}
 	],
