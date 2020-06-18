@@ -11,11 +11,10 @@ export function activate(context: vscode.ExtensionContext) {
 				.showInputBox({
 					placeHolder: 'Project Name (Default: flutter_app)',
 					prompt: 'Project Name (Default: flutter_app)',
-					validateInput: validateFlutterProjectName
+					validateInput: validateFlutterProjectName,
 				})
-				.then(_projectName => {
+				.then((_projectName) => {
 					if (typeof _projectName === 'undefined') {
-						console.log(typeof _projectName);
 						return Promise.reject('Canceled Flutter Create Wizard');
 					}
 					if (_projectName === '') {
@@ -32,15 +31,20 @@ export function activate(context: vscode.ExtensionContext) {
 				['swift', 'objc'],
 				{ placeHolder: 'iOS Language' }
 			);
+			let template = await vscode.window.showQuickPick(
+				['app', 'module', 'package', 'plugin'],
+				{
+					placeHolder: 'Project Template',
+				}
+			);
 
 			let orgName = await vscode.window
 				.showInputBox({
 					placeHolder: 'Org Name (Default: com.example.project_name)',
-					prompt: 'Org Name (Default: com.example.project_name)'
+					prompt: 'Org Name (Default: com.example.project_name)',
 				})
-				.then(_orgName => {
+				.then((_orgName) => {
 					if (typeof _orgName === 'undefined') {
-						console.log(typeof _orgName);
 						return Promise.reject('Canceled Flutter Create Wizard');
 					}
 					if (_orgName === '') {
@@ -49,14 +53,37 @@ export function activate(context: vscode.ExtensionContext) {
 					return _orgName;
 				});
 
+			let description = await vscode.window
+				.showInputBox({
+					placeHolder:
+						'Description (Default: A new Flutter project.)',
+					prompt: 'Description (Default: A new Flutter project.)',
+				})
+				.then((_description) => {
+					if (typeof _description === 'undefined') {
+						return Promise.reject('Canceled Flutter Create Wizard');
+					}
+					if (_description === '') {
+						_description = 'A new Flutter project.';
+					}
+					return _description;
+				});
+
+			let useAndroidX =
+				(await vscode.window.showQuickPick(['Yes', 'No'], {
+					placeHolder: 'Use AndroidX?',
+				})) === 'Yes'
+					? ' --androidx '
+					: '';
+
 			var directoyUri: string | vscode.Uri;
 			let projectDirectory = await vscode.window
 				.showOpenDialog({
 					canSelectFolders: true,
 					canSelectFiles: false,
-					defaultUri: undefined
+					defaultUri: undefined,
 				})
-				.then(_projectDirectory => {
+				.then((_projectDirectory) => {
 					directoyUri =
 						_projectDirectory === undefined
 							? ''
@@ -89,14 +116,21 @@ export function activate(context: vscode.ExtensionContext) {
 				androidLanguage +
 				' -i ' +
 				iosLanguage +
-				' ' +
+				' --template ' +
+				template +
+				' --description "' +
+				description +
+				'" ' +
+				useAndroidX +
 				projectDirectory;
+
+			console.log(createCommand);
 
 			vscode.window.withProgress(
 				{
 					location: vscode.ProgressLocation.Notification,
 					title: 'Creating ' + projectName,
-					cancellable: true
+					cancellable: true,
 				},
 				(_, token) => {
 					var newpath = path.join(
@@ -107,8 +141,8 @@ export function activate(context: vscode.ExtensionContext) {
 						console.log('Project creation canceled');
 					});
 
-					var p = new Promise(async _ => {
-						exec(createCommand, error => {
+					var p = new Promise(async (_) => {
+						exec(createCommand, (error) => {
 							console.log(error);
 
 							const hasFoldersOpen = !!(
