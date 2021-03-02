@@ -9,13 +9,13 @@
 - Easy to use.
 - Customization
     - [ ] Auto Pub Run after creation
-    - [ ] Template (app, package, package, plugin)
-    - [ ] Description
+    - [x] Template (app, package, package, plugin)
+    - [x] Description
     - [x] Organization Name
     - [x] Project Name
     - [x] Android Language
     - [x] iOS Language
-    - [ ] AndroidX Support
+    - [x] AndroidX Support
     - [x] Project Directory
 - GUI version of `flutter create` command.
 
